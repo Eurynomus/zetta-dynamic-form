@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { Box, TextField, Select, MenuItem, FormControl, InputLabel, Checkbox, RadioGroup, FormControlLabel, Radio, Button } from '@mui/material';
+import { Box, TextField, Select, MenuItem, FormControl, InputLabel, Checkbox, RadioGroup, FormControlLabel, Radio, Button, CircularProgress } from '@mui/material';
 
 interface Field {
     type: string;
@@ -20,11 +20,48 @@ interface Props {
 
 export default function FormBuilder({ schema }: Props) {
     const { control, handleSubmit, watch, reset } = useForm();
-    const onSubmit = (data: any) => console.log('Form Output:', data);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
         reset({}); // upon schema change, reset the form -- TO DO: add a loading state (spinner?)
     }, [schema, reset]);
+
+    const onSubmit = (data: any) => {
+        setIsSubmitting(true);
+
+        const visibleFieldNames = getVisibleFieldNames(schema.fields, data);
+        const filteredData = Object.keys(data)
+            .filter((key) => visibleFieldNames.includes(key))
+            .reduce((obj, key) => {
+                obj[key] = data[key];
+                return obj;
+            }, {} as Record<string, any>);
+
+        console.log('Form Output:', filteredData);
+
+        setTimeout(() => {
+            setIsSubmitting(false);
+            // TO DO: add a success message
+        }, 2000);
+    };
+
+    const getVisibleFieldNames = (fields: Field[], values: any): string[] => {
+        let names: string[] = [];
+
+        fields.forEach((field) => {
+            const isVisible = !field.visibleIf || values[field.visibleIf.field] === field.visibleIf.value;
+
+            if (isVisible) {
+                if (field.type === 'group' && field.fields) {
+                    names = names.concat(getVisibleFieldNames(field.fields, values));
+                } else {
+                    names.push(field.name);
+                }
+            }
+        });
+
+        return names;
+    };
 
     const renderField = (field: Field) => {
         const watchedValue = field.visibleIf?.field ? watch(field.visibleIf.field) : true;
@@ -32,7 +69,7 @@ export default function FormBuilder({ schema }: Props) {
 
         if (!isVisible) return null;
 
-        {/* TO DO: Add validation for each field type and animations */}
+        {/* TO DO: Add validation for each field type and animations */ }
 
         switch (field.type) {
             case 'text':
@@ -114,10 +151,13 @@ export default function FormBuilder({ schema }: Props) {
                         />
                     </FormControl>
                 );
+
+            // TO DO: add "text with custom validations" field type
+
             case 'group':
                 return (
                     <Box sx={{ border: '1px solid #ccc', p: 2, mb: 2, borderRadius: 2 }} key={field.name}>
-                        <h4>{field.label}</h4>
+                        <InputLabel sx={{ mb: 2 }}>{field.label}</InputLabel>
                         {field.fields?.map((subField) => renderField(subField))}
                     </Box>
                 );
@@ -131,9 +171,15 @@ export default function FormBuilder({ schema }: Props) {
             {schema.fields.map((field) => (
                 <div key={field.name}>{renderField(field)}</div>
             ))}
-            <Button type="submit" variant="contained">Submit</Button>
-            {/*TO DO: disable the button on click (loading state) */}
-            
+            <Button
+                type="submit"
+                variant="contained"
+                disabled={isSubmitting}
+                startIcon={isSubmitting ? <CircularProgress size={20} color="inherit" /> : null}
+            >
+                {isSubmitting ? 'Submitting...' : 'Submit'}
+            </Button>
+
         </form>
     );
 };

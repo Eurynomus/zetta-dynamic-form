@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { TextField, Container, Button, Alert, Box, Typography } from '@mui/material';
+import { TextField, Container, Button, Alert, Box, Typography, CircularProgress } from '@mui/material';
 import FormBuilder from './components/FormBuilder';
 
 export default function App() {
@@ -9,10 +9,13 @@ export default function App() {
   const [jsonInput, setJsonInput] = useState('');
   const [formSchema, setFormSchema] = useState<any | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const handleParse = () => {
     try {
       setError(null);
+      setIsGenerating(true);
+
       const parsed = JSON.parse(jsonInput);
 
       if (!parsed.fields || !Array.isArray(parsed.fields)) {
@@ -20,7 +23,13 @@ export default function App() {
         return;
       }
 
-      setFormSchema(parsed);
+
+      setTimeout(() => {
+        setFormSchema(parsed);
+        setIsGenerating(false);
+      }, 1000);
+
+
     } catch (err) {
       setError('Invalid JSON format');
     }
@@ -45,7 +54,8 @@ export default function App() {
         <TextField
           label="JSON Schema"
           multiline
-          minRows={6}
+          minRows={8}
+          maxRows={14}
           fullWidth
           value={jsonInput}
           onChange={(e) => setJsonInput(e.target.value)}
@@ -54,10 +64,14 @@ export default function App() {
         />
 
         <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
-          <Button onClick={handleParse} variant="contained">
-            Generate Form
+          <Button
+            onClick={handleParse}
+            variant="contained"
+            disabled={isGenerating}
+            startIcon={isGenerating ? <CircularProgress size={20} color="inherit" /> : null}
+          >
+            {isGenerating ? 'Generating...' : 'Generate Form'}
           </Button>
-          {/*TO DO: disable the button on click (loading state) */}
         </Box>
       </Box>
 
