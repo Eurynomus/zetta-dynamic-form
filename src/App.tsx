@@ -1,12 +1,5 @@
-import './App.css'
+import FormGenerator from './components/FormGenerator/FormGenerator';
 
-function App() {
-
-  return (
-    <>
-
-    </>
-  )
+export default function App() {
+  return <FormGenerator />;
 }
-
-export default App
