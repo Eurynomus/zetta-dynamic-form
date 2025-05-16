@@ -1,47 +1,62 @@
 import { useEffect, useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
-import { Button, CircularProgress } from '@mui/material';
+import { Button, CircularProgress, Alert, Snackbar } from '@mui/material';
 import { renderField } from './FormFieldRenderer';
 import type { Field, Props } from './types';
 
-
 export default function FormBuilder({ schema }: Props) {
-    const { control, handleSubmit, watch, reset, setValue, getValues } = useForm();
+    const {
+        control,
+        handleSubmit,
+        watch,
+        reset,
+        setValue,
+        getValues,
+        clearErrors,
+        formState: { errors }
+    } = useForm({
+        mode: 'onBlur'
+    });
+
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [showSuccess, setShowSuccess] = useState(false);
     const previousVisibleFieldsRef = useRef<string[]>([]);
     const watchAllFields = watch();
 
     useEffect(() => {
-        reset({}); // upon schema change, reset the form -- TO DO: add a loading state (spinner?)
+        reset(); // upon schema change, reset the form
     }, [schema, reset]);
 
-    useEffect(() => {
+    
+    useEffect(() => { // find fields that are no longer visible and reset them
         const formValues = getValues();
         const currentVisibleFields = getVisibleFieldNames(schema.fields, formValues);
         const previousVisibleFields = previousVisibleFieldsRef.current;
 
-        // find fields that were visible before
         const fieldsToReset = previousVisibleFields.filter(
             (fieldName) => !currentVisibleFields.includes(fieldName)
         );
 
-        // reset values for fields that are no longer visible
         if (fieldsToReset.length > 0) {
             fieldsToReset.forEach((fieldName) => {
-                setValue(fieldName, undefined, { shouldDirty: false });
+                setValue(fieldName, undefined, {
+                    shouldDirty: false,
+                    shouldValidate: false
+                });
+
+                clearErrors(fieldName);
             });
         }
 
-        // update the reference to track current visible fields
         previousVisibleFieldsRef.current = currentVisibleFields;
-    }, [watchAllFields, schema.fields]);
+    }, [watchAllFields, schema.fields, setValue, getValues, clearErrors]);
 
     const onSubmit = (data: any) => {
         setIsSubmitting(true);
 
         const visibleFieldNames = getVisibleFieldNames(schema.fields, data);
         const filteredData = Object.keys(data)
-            .filter((key) => visibleFieldNames.includes(key))
+            .filter(key => visibleFieldNames.includes(key))
             .reduce((obj, key) => {
                 obj[key] = data[key];
                 return obj;
@@ -49,8 +64,9 @@ export default function FormBuilder({ schema }: Props) {
 
         setTimeout(() => {
             setIsSubmitting(false);
+            setShowSuccess(true);
+            reset();
             console.log('Form Output:', filteredData);
-            // TO DO: add a success message
         }, 2000);
     };
 
@@ -72,19 +88,44 @@ export default function FormBuilder({ schema }: Props) {
         return names;
     };
 
+    const handleCloseSuccess = () => {
+        setShowSuccess(false);
+    };
+
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
-            {schema.fields.map((field) => (
-                <div key={field.name}>{renderField(field, control, watch)}</div>
-            ))}
-            <Button
-                type="submit"
-                variant="contained"
-                disabled={isSubmitting}
-                startIcon={isSubmitting ? <CircularProgress size={20} color="inherit" /> : null}
+        <>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                {schema.fields.map((field) => (
+                    <div key={field.name}>{renderField(field, control, watch)}</div>
+                ))}
+
+                {Object.keys(errors).length > 0 && (
+                    <Alert severity="error" sx={{ mt: 2, mb: 2 }}>
+                        Please fix the errors above before submitting
+                    </Alert>
+                )}
+
+                <Button
+                    type="submit"
+                    variant="contained"
+                    disabled={isSubmitting}
+                    startIcon={isSubmitting ? <CircularProgress size={20} color="inherit" /> : null}
+                    sx={{ mt: 2 }}
+                >
+                    {isSubmitting ? 'Submitting...' : 'Submit'}
+                </Button>
+            </form>
+
+            <Snackbar
+                open={showSuccess}
+                autoHideDuration={6000}
+                onClose={handleCloseSuccess}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
             >
-                {isSubmitting ? 'Submitting...' : 'Submit'}
-            </Button>
-        </form>
+                <Alert onClose={handleCloseSuccess} severity="success">
+                    Form submitted successfully!
+                </Alert>
+            </Snackbar>
+        </>
     );
 };
