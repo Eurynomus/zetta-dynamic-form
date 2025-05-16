@@ -10,8 +10,8 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  FormHelperText,
 } from '@mui/material';
-
 import type { Field } from './types';
 import type { JSX } from 'react';
 
@@ -34,12 +34,15 @@ export function renderField(
           name={field.name}
           control={control}
           defaultValue=""
-          render={({ field: rhfField }) => (
+          rules={field.validation}
+          render={({ field: rhfField, fieldState: { error } }) => (
             <TextField
               {...rhfField}
               label={field.label}
               fullWidth
               multiline={field.type === 'textarea'}
+              error={!!error}
+              helperText={error?.message}
               sx={{ mb: 2 }}
             />
           )}
@@ -47,60 +50,88 @@ export function renderField(
       );
     case 'dropdown':
       return (
-        <FormControl fullWidth sx={{ mb: 2 }} key={field.name}>
+        <FormControl 
+          fullWidth 
+          sx={{ mb: 2 }} 
+          key={field.name} 
+          error={!!control._formState.errors[field.name]}
+        >
           <InputLabel>{field.label}</InputLabel>
           <Controller
             name={field.name}
             control={control}
             defaultValue=""
-            render={({ field: rhfField }) => (
-              <Select {...rhfField} label={field.label}>
-                {field.options?.map((opt) => (
-                  <MenuItem key={opt} value={opt}>
-                    {opt}
-                  </MenuItem>
-                ))}
-              </Select>
+            rules={field.validation}
+            render={({ field: rhfField, fieldState: { error } }) => (
+              <>
+                <Select {...rhfField} label={field.label}>
+                  {field.options?.map((opt) => (
+                    <MenuItem key={opt} value={opt}>
+                      {opt}
+                    </MenuItem>
+                  ))}
+                </Select>
+                {error && <FormHelperText>{error.message}</FormHelperText>}
+              </>
             )}
           />
         </FormControl>
       );
     case 'checkbox':
       return (
-        <FormControlLabel
-          key={field.name}
-          control={
-            <Controller
-              name={field.name}
-              control={control}
-              defaultValue={false}
-              render={({ field: rhfField }) => (
-                <Checkbox {...rhfField} checked={rhfField.value || false} />
-              )}
-            />
-          }
-          label={field.label}
-        />
+        <FormControl 
+          key={field.name} 
+          error={!!control._formState.errors[field.name]}
+          sx={{ mb: 2 }}
+        >
+          <FormControlLabel
+            control={
+              <Controller
+                name={field.name}
+                control={control}
+                defaultValue=""
+                rules={field.validation}
+                render={({ field: rhfField }) => (
+                  <Checkbox {...rhfField} checked={rhfField.value || false} />
+                )}
+              />
+            }
+            label={field.label}
+          />
+          {control._formState.errors[field.name] && (
+            <FormHelperText>
+              {control._formState.errors[field.name]?.message?.toString()}
+            </FormHelperText>
+          )}
+        </FormControl>
       );
     case 'radio':
       return (
-        <FormControl key={field.name}>
-          <label>{field.label}</label>
+        <FormControl 
+          key={field.name} 
+          error={!!control._formState.errors[field.name]}
+          sx={{ mb: 2 }}
+        >
+          <Box sx={{ mb: 1 }}>{field.label}</Box>
           <Controller
             name={field.name}
             control={control}
             defaultValue=""
-            render={({ field: rhfField }) => (
-              <RadioGroup {...rhfField}>
-                {field.options?.map((opt) => (
-                  <FormControlLabel
-                    key={opt}
-                    value={opt}
-                    control={<Radio />}
-                    label={opt}
-                  />
-                ))}
-              </RadioGroup>
+            rules={field.validation}
+            render={({ field: rhfField, fieldState: { error } }) => (
+              <>
+                <RadioGroup {...rhfField}>
+                  {field.options?.map((opt) => (
+                    <FormControlLabel
+                      key={opt}
+                      value={opt}
+                      control={<Radio />}
+                      label={opt}
+                    />
+                  ))}
+                </RadioGroup>
+                {error && <FormHelperText>{error.message}</FormHelperText>}
+              </>
             )}
           />
         </FormControl>

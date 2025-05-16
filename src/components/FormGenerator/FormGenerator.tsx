@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
     TextField,
     Container,
@@ -9,6 +9,7 @@ import {
     CircularProgress
 } from '@mui/material';
 import FormBuilder from '../FormBuilder/FormBuilder';
+
 
 export default function FormGenerator() {
     const [jsonInput, setJsonInput] = useState('');
@@ -21,10 +22,17 @@ export default function FormGenerator() {
             setError(null);
             setIsGenerating(true);
 
+            if (!jsonInput.trim()) {
+                setError('Please enter JSON schema');
+                setIsGenerating(false);
+                return;
+            }
+
             const parsed = JSON.parse(jsonInput);
 
             if (!parsed.fields || !Array.isArray(parsed.fields)) {
                 setError('JSON must contain a "fields" array');
+                setIsGenerating(false);
                 return;
             }
 
@@ -39,14 +47,12 @@ export default function FormGenerator() {
         }
     };
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            if (jsonInput) {
-                handleParse();
-            }
-        }, 1000);
-
-        return () => clearTimeout(timer);
+    useEffect(() => { // clears the form if there is no schema
+        if (!jsonInput.trim() && formSchema) {
+            setFormSchema(null);
+        } else if (jsonInput) {
+            setError(null);
+        }
     }, [jsonInput]);
 
     return (
@@ -63,7 +69,6 @@ export default function FormGenerator() {
                     value={jsonInput}
                     onChange={(e) => setJsonInput(e.target.value)}
                     error={!!error}
-                    helperText={error || "Enter a valid JSON schema with a 'fields' array"}
                 />
 
                 <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
