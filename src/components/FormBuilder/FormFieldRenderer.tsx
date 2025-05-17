@@ -15,7 +15,6 @@ import {
 import type { Field } from './types';
 import type { JSX } from 'react';
 
-
 export function renderField(
   field: Field,
   control: Control<any>,
@@ -49,14 +48,10 @@ export function renderField(
           )}
         />
       );
+
     case 'dropdown':
       return (
-        <FormControl
-          fullWidth
-          sx={{ mb: 2 }}
-          key={field.name}
-          error={!!control._formState.errors[field.name]}
-        >
+        <FormControl fullWidth sx={{ mb: 2 }} key={field.name}>
           <InputLabel>{field.label}</InputLabel>
           <Controller
             name={field.name}
@@ -65,7 +60,7 @@ export function renderField(
             rules={field.validation}
             render={({ field: rhfField, fieldState: { error } }) => (
               <>
-                <Select {...rhfField} label={field.label}>
+                <Select {...rhfField} label={field.label} error={!!error}>
                   {field.options?.map((option, index) => (
                     <MenuItem key={`${field.name}-${option}-${index}`} value={option}>
                       {option}
@@ -78,41 +73,31 @@ export function renderField(
           />
         </FormControl>
       );
+
     case 'checkbox':
       return (
-        <FormControl
-          key={field.name}
-          error={!!control._formState.errors[field.name]}
-          sx={{ mb: 2 }}
-        >
-          <FormControlLabel
-            control={
-              <Controller
-                name={field.name}
-                control={control}
-                defaultValue=""
-                rules={field.validation}
-                render={({ field: rhfField }) => (
-                  <Checkbox {...rhfField} checked={rhfField.value || false} />
-                )}
-              />
-            }
-            label={field.label}
+        <FormControl key={field.name} sx={{ mb: 2 }}>
+          <Controller
+            name={field.name}
+            control={control}
+            defaultValue={false}
+            rules={field.validation}
+            render={({ field: rhfField, fieldState: { error } }) => (
+              <>
+                <FormControlLabel
+                  control={<Checkbox {...rhfField} checked={!!rhfField.value} />}
+                  label={field.label}
+                />
+                {error && <FormHelperText error>{error.message}</FormHelperText>}
+              </>
+            )}
           />
-          {control._formState.errors[field.name] && (
-            <FormHelperText>
-              {control._formState.errors[field.name]?.message?.toString()}
-            </FormHelperText>
-          )}
         </FormControl>
       );
+
     case 'radio':
       return (
-        <FormControl
-          key={field.name}
-          error={!!control._formState.errors[field.name]}
-          sx={{ mb: 2 }}
-        >
+        <FormControl key={field.name} sx={{ mb: 2 }}>
           <Box sx={{ mb: 1 }}>{field.label}</Box>
           <Controller
             name={field.name}
@@ -131,12 +116,13 @@ export function renderField(
                     />
                   ))}
                 </RadioGroup>
-                {error && <FormHelperText>{error.message}</FormHelperText>}
+                {error && <FormHelperText error>{error.message}</FormHelperText>}
               </>
             )}
           />
         </FormControl>
       );
+
     case 'group':
       return (
         <Box
@@ -144,9 +130,14 @@ export function renderField(
           key={field.name}
         >
           <InputLabel sx={{ mb: 2 }}>{field.label}</InputLabel>
-          {field.fields?.map((subField) => renderField(subField, control, watch))}
+          {field.fields?.map((subField) => (
+            <div key={subField.name}>
+              {renderField(subField, control, watch)}
+            </div>
+          ))}
         </Box>
       );
+
     default:
       return null;
   }

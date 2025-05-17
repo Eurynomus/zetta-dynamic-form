@@ -80,17 +80,26 @@ export default function FormGenerator() {
                     >
                         {isGenerating ? 'Generating...' : 'Generate Form'}
                     </Button>
+                    <Button
+                        onClick={() => setJsonInput('')}
+                        variant="contained"
+                        color='secondary'
+                    >
+                        Reset Form
+                    </Button>
                 </Box>
             </Box>
 
             {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
 
-            {formSchema && (
-                <Box sx={{ mt: 4, p: 3, border: '1px solid #eee', borderRadius: 2 }}>
-                    <Typography variant="h5" sx={{ mb: 2 }}>Generated Form</Typography>
-                    <FormBuilder schema={formSchema} />
-                </Box>
-            )}
-        </Container>
+            {
+                formSchema && (
+                    <Box sx={{ mt: 4, p: 3, border: '1px solid #eee', borderRadius: 2 }}>
+                        <Typography variant="h5" sx={{ mb: 2 }}>Generated Form</Typography>
+                        <FormBuilder schema={formSchema} />
+                    </Box>
+                )
+            }
+        </Container >
     );
 }

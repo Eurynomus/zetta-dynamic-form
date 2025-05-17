@@ -14,7 +14,7 @@ export default function SuccessNotification({ open, onClose }: SuccessNotificati
             anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
         >
             <Alert onClose={onClose} severity="success">
-                Form submitted successfully!
+                Form submitted successfully! Check console for output.
             </Alert>
         </Snackbar>
     );

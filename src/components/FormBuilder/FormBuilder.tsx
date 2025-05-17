@@ -25,6 +25,17 @@ export default function FormBuilder({ schema }: Props) {
     const watchAllFields = watch();
     const { showSuccess, setShowSuccess, isSubmitting, handleFormSubmit } = useFormSubmission(reset, schema.fields);
 
+    // useEffect(() => {
+    //     reset();
+    // }, [schema, reset]);
+
+    // useEffect(() => {
+    //     if (Object.keys(apiErrors).length > 0) {
+    //         setApiErrors({});
+    //     }
+    // }, [watchAllFields]);
+
+
     useVisibleFields(schema.fields, watchAllFields, getValues, setValue, clearErrors);
     useApiAutoFill(schema.fields, watchAllFields, getValues, setValue);
 
@@ -39,8 +50,8 @@ export default function FormBuilder({ schema }: Props) {
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit)}>
-                {schema.fields.map((field) => (
-                    <div key={field.name}>{renderField(field, control, watch)}</div>
+                {schema.fields.map((field, index) => (
+                    <div key={index}>{renderField(field, control, watch)}</div>
                 ))}
 
                 <FormErrorAlert errors={errors} />
