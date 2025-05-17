@@ -15,6 +15,7 @@ import {
 import type { Field } from './types';
 import type { JSX } from 'react';
 
+
 export function renderField(
   field: Field,
   control: Control<any>,
@@ -50,10 +51,10 @@ export function renderField(
       );
     case 'dropdown':
       return (
-        <FormControl 
-          fullWidth 
-          sx={{ mb: 2 }} 
-          key={field.name} 
+        <FormControl
+          fullWidth
+          sx={{ mb: 2 }}
+          key={field.name}
           error={!!control._formState.errors[field.name]}
         >
           <InputLabel>{field.label}</InputLabel>
@@ -65,9 +66,9 @@ export function renderField(
             render={({ field: rhfField, fieldState: { error } }) => (
               <>
                 <Select {...rhfField} label={field.label}>
-                  {field.options?.map((opt) => (
-                    <MenuItem key={opt} value={opt}>
-                      {opt}
+                  {field.options?.map((option, index) => (
+                    <MenuItem key={`${field.name}-${option}-${index}`} value={option}>
+                      {option}
                     </MenuItem>
                   ))}
                 </Select>
@@ -79,8 +80,8 @@ export function renderField(
       );
     case 'checkbox':
       return (
-        <FormControl 
-          key={field.name} 
+        <FormControl
+          key={field.name}
           error={!!control._formState.errors[field.name]}
           sx={{ mb: 2 }}
         >
@@ -107,8 +108,8 @@ export function renderField(
       );
     case 'radio':
       return (
-        <FormControl 
-          key={field.name} 
+        <FormControl
+          key={field.name}
           error={!!control._formState.errors[field.name]}
           sx={{ mb: 2 }}
         >
@@ -121,12 +122,12 @@ export function renderField(
             render={({ field: rhfField, fieldState: { error } }) => (
               <>
                 <RadioGroup {...rhfField}>
-                  {field.options?.map((opt) => (
+                  {field.options?.map((option, index) => (
                     <FormControlLabel
-                      key={opt}
-                      value={opt}
+                      key={`${field.name}-${option}-${index}`}
+                      value={option}
                       control={<Radio />}
-                      label={opt}
+                      label={option}
                     />
                   ))}
                 </RadioGroup>
