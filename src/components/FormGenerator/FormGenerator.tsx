@@ -41,7 +41,7 @@ export default function FormGenerator() {
                 setIsGenerating(false);
             }, 1000);
 
-        } catch (err) {
+        } catch (err: any) {
             setError('Invalid JSON format');
             setIsGenerating(false);
         }

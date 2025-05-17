@@ -8,6 +8,7 @@ import SuccessNotification from './components/SuccessNotification';
 import { useFormSubmission } from './hooks/useFormSubmission';
 import type { Props } from './types';
 
+
 export default function FormBuilder({ schema }: Props) {
     const {
         control,
@@ -24,17 +25,7 @@ export default function FormBuilder({ schema }: Props) {
 
     const watchAllFields = watch();
     const { showSuccess, setShowSuccess, isSubmitting, handleFormSubmit } = useFormSubmission(reset, schema.fields);
-
-    // useEffect(() => {
-    //     reset();
-    // }, [schema, reset]);
-
-    // useEffect(() => {
-    //     if (Object.keys(apiErrors).length > 0) {
-    //         setApiErrors({});
-    //     }
-    // }, [watchAllFields]);
-
+    const apiError = useApiAutoFill(schema.fields, watchAllFields, getValues, setValue);
 
     useVisibleFields(schema.fields, watchAllFields, getValues, setValue, clearErrors);
     useApiAutoFill(schema.fields, watchAllFields, getValues, setValue);
@@ -54,7 +45,7 @@ export default function FormBuilder({ schema }: Props) {
                     <div key={index}>{renderField(field, control, watch)}</div>
                 ))}
 
-                <FormErrorAlert errors={errors} />
+                <FormErrorAlert errors={errors} apiError={apiError} />
 
                 <SubmitButton isSubmitting={isSubmitting} />
             </form>

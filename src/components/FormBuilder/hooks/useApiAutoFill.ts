@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { mockApiCall } from '../../../services/mockApi';
 import type { Field } from '../types';
 
@@ -9,6 +9,7 @@ export function useApiAutoFill(
     setValue: Function
 ) {
     const lastApiInputsRef = useRef<Record<string, Record<string, string>>>({});
+    const [apiError, setApiError] = useState<Error | null>(null);
 
     useEffect(() => {
         const formValues = getValues();
@@ -25,9 +26,7 @@ export function useApiAutoFill(
 
                         const lastFieldInput = lastApiInputsRef.current[field.name] || {};
 
-                        if (
-                            JSON.stringify(currentInput) === JSON.stringify(lastFieldInput)
-                        ) {
+                        if (JSON.stringify(currentInput) === JSON.stringify(lastFieldInput)) {
                             continue;
                         }
 
@@ -35,6 +34,7 @@ export function useApiAutoFill(
 
                         try {
                             const apiData = await mockApiCall(currentInput);
+                            setApiError(null);
 
                             Object.entries(field.apiAutoFill).forEach(([apiKey, formField]) => {
                                 if (apiKey in apiData) {
@@ -44,8 +44,16 @@ export function useApiAutoFill(
                                     });
                                 }
                             });
-                        } catch (err) {
+                        } catch (err: any) {
                             console.error('Error:', err);
+                            setApiError(err);
+
+                            Object.values(field.apiAutoFill).forEach((formField) => {
+                                setValue(formField, '', {
+                                    shouldDirty: true,
+                                    shouldValidate: true
+                                });
+                            });
                         }
                     }
                 }
@@ -55,4 +63,6 @@ export function useApiAutoFill(
         const debounced = setTimeout(callApis, 500);
         return () => clearTimeout(debounced);
     }, [watchAllFields, fields, setValue, getValues]);
+
+    return apiError;
 }

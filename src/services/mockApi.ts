@@ -51,6 +51,8 @@ export async function mockApiCall(input: Record<string, string>): Promise<{ [key
               quantity: '4',
               status: 'Rejected'
             });
+          default:
+            return reject(new Error(`No order found for Order ID - ${input.orderId}`));
         }
       }
 
