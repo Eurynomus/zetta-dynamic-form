@@ -4,7 +4,6 @@ export interface Field {
     name: string;
     options?: string[];
     validation?: ValidationRules;
-    validationKey?: string; // for custom validations
     visibleIf?: { field: string; value: any };
     fields?: Field[];
     apiTrigger?: string[];
@@ -21,9 +20,7 @@ export type ValidationRules = {
     required?: boolean | string;
     minLength?: number | { value: number; message: string };
     maxLength?: number | { value: number; message: string };
-    min?: number | { value: number; message: string };
-    max?: number | { value: number; message: string };
-    pattern?: RegExp | { value: RegExp; message: string };
+    customValidation?: string;
+    regex?: { value: RegExp; message: string };
     validate?: (value: any) => boolean | string | Promise<boolean | string>;
-    email?: boolean | { message: string };
 };

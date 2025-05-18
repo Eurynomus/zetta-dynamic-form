@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import type { Field } from './types';
 import type { JSX } from 'react';
+import applyCustomValidation from './utils/validationHelper';
 
 export function renderField(
   field: Field,
@@ -34,7 +35,7 @@ export function renderField(
           name={field.name}
           control={control}
           defaultValue=""
-          rules={field.validation}
+          rules={applyCustomValidation(field.validation)}
           render={({ field: rhfField, fieldState: { error } }) => (
             <TextField
               {...rhfField}
