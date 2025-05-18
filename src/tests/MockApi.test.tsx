@@ -1,4 +1,4 @@
-import { mockApiCall } from "../../services/mockApi";
+import { mockApiCall } from "../services/mockApi";
 
 describe('mockApiCall', () => {
   it('returns user data for userId 1', async () => {
