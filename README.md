@@ -2,12 +2,12 @@
 
 A dynamic form builder built with **React**, **TypeScript**, **Material UI**, **Jest** and **React Hook Form**.
 
-## Introduction
+# Introduction
 
 This project allows you to generate interactive, configurable forms from a simple JSON schema. It supports a wide range of input types, nested groups, dynamic validation, conditional visibility, and even mock API-based auto-filling.
 
 
-## Features
+# Features
 
 ✅ Schema-driven form rendering  
 ✅ Supports input types like text, textarea, dropdown, checkbox, radio  
@@ -19,19 +19,19 @@ This project allows you to generate interactive, configurable forms from a simpl
 ✅ Fully responsive, component-based UI  
 ✅ Built-in unit tests  
 
-## Installation
+# Installation
 
-1. Clone repository.  
+## 1. Clone repository.  
 https://github.com/Eurynomus/zetta-dynamic-form.git  
 cd zetta-dynamic-form
 
-2. Install dependencies.  
+## 2. Install dependencies.  
 npm install or yarn
 
-3. Start the development server.  
+## 3. Start the development server.  
 npm run dev or yarn start
 
-## How It Works
+# How It Works
 
 At the top of the page, there’s an input box where you can paste a JSON schema that describes your form.
 
@@ -44,7 +44,7 @@ When the JSON is valid:
 When the JSON is not valid:
 * Throws an error for invalid JSON format.
 
-## Project Structure
+# Project Structure
 
 ```plaintext
 src/
@@ -76,17 +76,18 @@ src/
     └── Validations.test.tsx - Unit tests for the validations
 ```
 
-## Mock API JSON Schema
+# Mock API JSON Schema
 
 This schema defines a dynamic form structure that supports manual input fields, grouped fields, validation rules, and auto-filling data from APIs triggered by specific inputs.  
 
-1. Text Fields  
-* Simple text input fields.  
-* Properties:  
-- type: "text"  
-- label: User-facing name of the field.  
-- name: Unique identifier for the field.  
-- validation (optional): Rules that define required input or other constraints.  
+## Text Fields  
+Simple text input fields for user interaction.  
+# Properties:  
+
+- **type**: `"text"` - Defines the field as a text input.
+- **label**: User-facing name displayed for the field.
+- **name**: Unique identifier for the field.
+- **validation** (optional): Rules to enforce required input or other constraints.
 
 ```plaintext
 {
@@ -97,16 +98,18 @@ This schema defines a dynamic form structure that supports manual input fields, 
 }
 ```
 
-2. Group Fields  
-* Group multiple related fields under a labeled section.  
-* Support API-triggered auto-filling of their nested fields.  
-* Properties:  
-- type: "group"  
-- label: Section name displayed to the user.  
-- name: Unique identifier for the group.  
-- apiTrigger: List of field names whose values trigger the API call.  
-- apiAutoFill: Mapping of API response fields to the group's nested field names.  
-- fields: Array of nested field definitions.  
+## Group Fields
+
+Groups multiple related fields under a labeled section with support for API-triggered auto-filling of nested fields.
+
+# Properties
+
+- **type**: `"group"` - Defines the field as a group.
+- **label**: Section name displayed to the user.
+- **name**: Unique identifier for the group.
+- **apiTrigger**: List of field names whose values trigger the API call.
+- **apiAutoFill**: Mapping of API response fields to the group's nested field names.
+- **fields**: Array of nested field definitions.
 
 ```plaintext
 {
@@ -129,10 +132,10 @@ This schema defines a dynamic form structure that supports manual input fields, 
 }
 ```
 
-3. Auto-Fill  
-* When all fields specified in a group's apiTrigger array have values, the form triggers an API call.  
-* The API response fields mapped in apiAutoFill are automatically populated into the corresponding nested fields of the group.  
-* This allows dynamic population of related data without manual entry.  
+## Auto-Fill
 
-4. Validation  
-* Each field may have a validation object defining rules, for example "required".
+When all fields in a group's `apiTrigger` array have values, an API call is triggered. The API response fields mapped in `apiAutoFill` are automatically populated into the corresponding nested fields of the group, enabling dynamic data population without manual entry.
+
+## Validation
+
+Each field may include a `validation` object defining rules, such as `"required"`, to enforce input constraints.
