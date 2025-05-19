@@ -63,20 +63,39 @@ src/
     └── Validations.test.tsx - Unit tests for the validations
 ```
 
-# How It Works
-
-At the top of the page, there’s an input box where you can paste a JSON schema that describes your form.
-
-When the JSON is valid:
-* As soon as a valid schema is provided, the form renders.
-* A “Reset Form” button is available to reset the schema input and start fresh.
-* Mock API calls are triggered where applicable to auto-fill fields.
-* On submit the filled values are output in the console as a structured JSON object — preserving the hierarchy of nested groups and field dependencies.  
-
-When the JSON is not valid:
-* Throws an error for invalid JSON format.
-
 # Dynamic Form Renderer
+## The Form Generator
+The Form Generator component allows you to create dynamic forms by inputting a `JSON schema`. This provides a visual interface for testing and building forms without writing code.  
+
+### JSON Input Handling
+
+* Users enter a `JSON schema` in the TextField component
+* The component maintains the input state with useState and updates it on change
+* When the input is cleared, the form is automatically reset through a useEffect hook
+
+### Schema Validation Process
+
+* When `"Generate Form"` is clicked, the `handleParse` function runs 
+* It performs several `validation checks`:
+- Ensures the input isn't empty  
+- Attempts to parse the JSON using `JSON.parse()`  
+- Verifies the parsed object has a fields array  
+* If any validation fails, an appropriate `error message` is displayed
+
+### Form Generation
+
+* Upon `successful validation`, the component sets `isGenerating` to true (showing a loading state)
+* After a small delay (1000ms), the parsed schema is stored in state
+* The FormBuilder component receives the validated schema and renders the actual form
+* Loading indicators provide visual feedback during generation
+
+### Error Handling
+
+* JSON parsing errors are caught and displayed as user-friendly messages
+* The Alert component displays errors when validation fails
+* Error states are automatically cleared when the input changes
+
+### UI Components
 The `renderField` function in `FormFieldRenderer.tsx` is the core of our dynamic form builder, transforming configuration objects into interactive form elements by integrating Material UI components with React Hook Form.
 
 ## Material UI Integration
@@ -253,10 +272,10 @@ This schema defines a dynamic form structure that supports manual input fields, 
 Simple text input fields for user interaction.  
 ### Properties:  
 
-- **type**: `"text"` - Defines the field as a text input.
-- **label**: User-facing name displayed for the field.
-- **name**: Unique identifier for the field.
-- **validation** (optional): Rules to enforce required input or other constraints.
+- **type**: `"text"` - Defines the field as a text input
+- **label**: User-facing name displayed for the field
+- **name**: Unique identifier for the field
+- **validation** (optional): Rules to enforce required input or other constraints
 
 ```plaintext
 {
@@ -273,12 +292,12 @@ Groups multiple related fields under a labeled section with support for API-trig
 
 ### Properties
 
-- **type**: `"group"` - Defines the field as a group.
-- **label**: Section name displayed to the user.
-- **name**: Unique identifier for the group.
-- **apiTrigger**: List of field names whose values trigger the API call.
-- **apiAutoFill**: Mapping of API response fields to the group's nested field names.
-- **fields**: Array of nested field definitions.
+- **type**: `"group"` - Defines the field as a group
+- **label**: Section name displayed to the user
+- **name**: Unique identifier for the group
+- **apiTrigger**: List of field names whose values trigger the API call
+- **apiAutoFill**: Mapping of API response fields to the group's nested field names
+- **fields**: Array of nested field definitions
 
 ```plaintext
 {
