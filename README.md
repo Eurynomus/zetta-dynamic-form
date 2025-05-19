@@ -70,30 +70,30 @@ The Form Generator component allows you to create dynamic forms by inputting a `
 ### JSON Input Handling
 
 * Users enter a `JSON schema` in the TextField component
-* The component maintains the input state with useState and updates it on change
-* When the input is cleared, the form is automatically reset through a useEffect hook
+* The component maintains the input state with useState and `updates it on change`
+* When the input is `cleared`, the form is automatically reset through a useEffect hook
 
 ### Schema Validation Process
 
 * When `"Generate Form"` is clicked, the `handleParse` function runs 
 * It performs several `validation checks`:
-- Ensures the input isn't empty  
-- Attempts to parse the JSON using `JSON.parse()`  
-- Verifies the parsed object has a fields array  
+  1. Ensures the input isn't `empty`  
+  2. Attempts to parse the JSON using `JSON.parse()`  
+  3. Verifies the parsed object has a `fields array` 
 * If any validation fails, an appropriate `error message` is displayed
 
 ### Form Generation
 
 * Upon `successful validation`, the component sets `isGenerating` to true (showing a loading state)
-* After a small delay (1000ms), the parsed schema is stored in state
-* The FormBuilder component receives the validated schema and renders the actual form
-* Loading indicators provide visual feedback during generation
+* After a small delay (1000ms), the parsed schema is `stored` in state
+* The FormBuilder component receives the `validated schema` and renders the actual form
+* `Loading indicators` provide visual feedback during generation
 
 ### Error Handling
 
-* JSON parsing errors are caught and displayed as user-friendly messages
-* The Alert component displays errors when validation fails
-* Error states are automatically cleared when the input changes
+* JSON parsing errors are caught and displayed as `user-friendly messages`
+* The Alert component displays errors when `validation fails`
+* Error states are automatically `cleared when the input changes`
 
 ### UI Components
 The `renderField` function in `FormFieldRenderer.tsx` is the core of our dynamic form builder, transforming configuration objects into interactive form elements by integrating Material UI components with React Hook Form.
