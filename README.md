@@ -642,5 +642,5 @@ The project includes unit tests covering the core functionality. They are implem
 * API mock tests - Verify the behavior of the `mockApiCall` function for various valid inputs and error cases.
 * Validation helper tests - Ensure custom validation logic works correctly for email, string-only, number-only, and regex-based rules.  
 
-The tests can be started with:  
+## The tests can be started with:  
 npm test  or yarn test
