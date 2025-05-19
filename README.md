@@ -31,6 +31,38 @@ npm install or yarn
 ## 3. Start the development server.  
 npm run dev or yarn start
 
+# Project Structure
+
+```plaintext
+src/
+├── components/
+│   ├── FormBuilder/
+│   │   ├── components/
+│   │   │   ├── FormErrorAlert.tsx - Displaying error messages in the form
+│   │   │   ├── SubmitButton.tsx - Form submit button
+│   │   │   └── SuccessNotification.tsx - Displays a temporary popup message on successfull submission
+│   │   ├── hooks/
+│   │   │   ├── useApiAutoFill.ts - Automatically fetches and fills form data from APIs based on triggers
+│   │   │   ├── useFormSubmission.ts - Form submission logic, including data filtering, transformation and UI state management
+│   │   │   └── useVisibleFields.ts - Tracks which fields are visible in the form over time and manage form state accordingly
+│   │   ├── utils/
+│   │   │   ├── formUtils.ts - Determines which fields should be visible based on the current form values
+│   │   │   ├── transformFormData.ts - Transforms form data into a structured object based on fields definition
+│   │   │   └── validationHelper.ts - Custom validations for string, number, regex, email
+│   │   ├── FormBuilder.tsx - The dynamic form builder. Implements form & state validation, dynamic field rendering, field visibility tracking, api auto-fill, 
+                              submit handling & states, error display, success feedback, submit button
+│   │   ├── FormFieldRenderer.tsx - The main component for all field types
+        └── types.ts - All interfaces
+│   └── FormGenerator/
+        ├── FormGenerator.tsx - Dynamically renders your JSON schema into form fields
+├── services/
+│   └── mockApi.ts - Mock API data
+└── tests/
+    ├── FormGenerator.test.tsx - Unit tests for the Form Generator component
+    ├── MockApi.test.tsx - Unit tests for the mockapi functionality
+    └── Validations.test.tsx - Unit tests for the validations
+```
+
 # How It Works
 
 At the top of the page, there’s an input box where you can paste a JSON schema that describes your form.
@@ -39,7 +71,7 @@ When the JSON is valid:
 * As soon as a valid schema is provided, the form renders.
 * A “Reset Form” button is available to reset the schema input and start fresh.
 * Mock API calls are triggered where applicable to auto-fill fields.
-* On submit the filled values are output as a structured JSON object — preserving the hierarchy of nested groups and field dependencies.  
+* On submit the filled values are output in the console as a structured JSON object — preserving the hierarchy of nested groups and field dependencies.  
 
 When the JSON is not valid:
 * Throws an error for invalid JSON format.
@@ -102,8 +134,6 @@ Example configuration with conditional fields:
 <details>
 <summary>Click to view JSON configuration</summary>
 ```json
-{
-  "fields": [
     {
       "type": "dropdown",
       "label": "User Type",
@@ -141,43 +171,9 @@ Example configuration with conditional fields:
         }
       ]
     }
-  ]
-}
 ```
 </details>
 
-
-# Project Structure
-
-```plaintext
-src/
-├── components/
-│   ├── FormBuilder/
-│   │   ├── components/
-│   │   │   ├── FormErrorAlert.tsx - Displaying error messages in the form
-│   │   │   ├── SubmitButton.tsx - Form submit button
-│   │   │   └── SuccessNotification.tsx - Displays a temporary popup message on successfull submission
-│   │   ├── hooks/
-│   │   │   ├── useApiAutoFill.ts - Automatically fetches and fills form data from APIs based on triggers
-│   │   │   ├── useFormSubmission.ts - Form submission logic, including data filtering, transformation and UI state management
-│   │   │   └── useVisibleFields.ts - Tracks which fields are visible in the form over time and manage form state accordingly
-│   │   ├── utils/
-│   │   │   ├── formUtils.ts - Determines which fields should be visible based on the current form values
-│   │   │   ├── transformFormData.ts - Transforms form data into a structured object based on fields definition
-│   │   │   └── validationHelper.ts - Custom validations for string, number, regex, email
-│   │   ├── FormBuilder.tsx - The dynamic form builder. Implements form & state validation, dynamic field rendering, field visibility tracking, api auto-fill, 
-                              submit handling & states, error display, success feedback, submit button
-│   │   ├── FormFieldRenderer.tsx - The main component for all field types
-        └── types.ts - All interfaces
-│   └── FormGenerator/
-        ├── FormGenerator.tsx - Dynamically renders your JSON schema into form fields
-├── services/
-│   └── mockApi.ts - Mock API data
-└── tests/
-    ├── FormGenerator.test.tsx - Unit tests for the Form Generator component
-    ├── MockApi.test.tsx - Unit tests for the mockapi functionality
-    └── Validations.test.tsx - Unit tests for the validations
-```
 
 # Validation Rules
 
