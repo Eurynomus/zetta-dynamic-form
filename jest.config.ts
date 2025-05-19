@@ -11,7 +11,7 @@ export default {
   testMatch: ['<rootDir>/src/**/*.test.[jt]sx'],
   globals: {
     'ts-jest': {
-      tsconfig: '<rootDir>/tsconfig.json',
+      tsconfig: '<rootDir>/tsconfig.test.json',
     },
   },
 };
