@@ -7,7 +7,7 @@ A dynamic form builder built with **React**, **TypeScript**, **Material UI**, **
 This project allows you to generate interactive, configurable forms from a simple JSON schema. It supports a wide range of input types, nested groups, dynamic validation, conditional visibility, and even mock API-based auto-filling.
 
 
-# Features
+# Core Features
 
 ✅ Schema-driven form rendering  
 ✅ Supports input types like text, textarea, dropdown, checkbox, radio  
@@ -36,13 +36,116 @@ npm run dev or yarn start
 At the top of the page, there’s an input box where you can paste a JSON schema that describes your form.
 
 When the JSON is valid:
-* As soon as a valid schema is provided, the form renders dynamically.
+* As soon as a valid schema is provided, the form renders.
 * A “Reset Form” button is available to reset the schema input and start fresh.
 * Mock API calls are triggered where applicable to auto-fill fields.
 * On submit the filled values are output as a structured JSON object — preserving the hierarchy of nested groups and field dependencies.  
 
 When the JSON is not valid:
 * Throws an error for invalid JSON format.
+
+# Dynamic Form Renderer
+The `renderField` function in `FormFieldRenderer.tsx` is the core of our dynamic form builder, transforming configuration objects into interactive form elements by integrating Material UI components with React Hook Form.
+
+## Material UI Integration
+The function leverages Material UI's component library to create a consistent, styled form experience:
+
+```js
+// Example of Material UI component usage in renderField
+<TextField
+  {...rhfField}
+  label={field.label}
+  fullWidth
+  multiline={field.type === 'textarea'}
+  error={!!error}
+  helperText={error?.message}
+  sx={{ mb: 2 }}
+/>
+```  
+* Uses components like `TextField`, `Select`, `Checkbox` and `RadioGroup`
+* Applies consistent styling with `Material UI`'s sx prop
+* Handles `error states` and `validation feedback`
+* Creates styled containers for `grouped fields`
+
+## React Hook Form Integration
+The function seamlessly connects with `React Hook Form` for state management and validation:
+
+```js
+<Controller
+  name={field.name}
+  control={control}
+  defaultValue=""
+  rules={applyCustomValidation(field.validation)}
+  render={({ field: rhfField, fieldState: { error } }) => (
+    // Material UI component rendering
+  )}
+/>
+```  
+* Uses `Controller` to bridge Material UI with form state
+* Applies `validation rules` through React Hook Form's validation system
+* Accesses field state to `display errors`
+* Uses the `watch` function to observe field values for `conditional logic`
+
+## Conditional Rendering
+The function implements `dynamic form behavior` where fields appear or disappear based on other fields values:
+
+```js
+// How conditional visibility works
+const watchedValue = field.visibleIf?.field ? watch(field.visibleIf.field) : true;
+const isVisible = field.visibleIf ? watchedValue === field.visibleIf.value : true;
+
+if (!isVisible) return null;
+```
+
+Example configuration with conditional fields:  
+
+<details>
+<summary>Click to view JSON configuration</summary>
+```json
+{
+  "fields": [
+    {
+      "type": "dropdown",
+      "label": "User Type",
+      "name": "userType",
+      "options": [
+        { "label": "Person", "value": "Person" },
+        { "label": "Business", "value": "Business" }
+      ],
+      "validation": {
+        "required": "User type is required"
+      }
+    },
+    {
+      "type": "group",
+      "label": "Personal Info",
+      "visibleIf": { "field": "userType", "value": "Person" },
+      "fields": [
+        {
+          "type": "text",
+          "label": "First Name",
+          "name": "firstName",
+          "validation": {
+            "required": "First name is required",
+            "minLength": { "value": 2, "message": "Must be at least 2 characters" }
+          }
+        },
+        {
+          "type": "text",
+          "label": "Last Name",
+          "name": "lastName",
+          "validation": {
+            "required": "Last name is required",
+            "maxLength": { "value": 6, "message": "Maximum allowed characters is 6" }
+          }
+        }
+      ]
+    }
+  ]
+}
+```
+</details>
+
 
 # Project Structure
 
@@ -307,6 +410,7 @@ The fields will be populated after 2 seconds (simulating a real API call), if yo
 </details>
 
 # Examples
+Check the console in the browser for an output.
 
 ## Example with all validators
 <details>
