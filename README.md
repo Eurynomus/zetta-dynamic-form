@@ -93,7 +93,7 @@ Each field can have one or more of the following validation rules:
 
 
 ## How it Works
-The validation rules in your JSON input are automatically parsed and passed into `"react-hook-form's` `"rules` parameter. Additional helper logic (`customValidation`) is applied via the `applyCustomValidation` utility.
+The validation rules in your JSON input are automatically parsed and passed into `react-hook-form's` `rules` parameter. Additional helper logic (`customValidation`) is applied via the `applyCustomValidation` utility.
 
 ## Custom Validation Types
 | Type       | Description                     | Pattern Used                   |
@@ -102,10 +102,9 @@ The validation rules in your JSON input are automatically parsed and passed into
 | `"number"` | Only numeric characters allowed | `/^[0-9]+$/`                   |
 | `"email"`  | Standard email format           | `/^[^\s@]+@[^\s@]+\.[^\s@]+$/` |
 
-These types can be declared in the JSON via:  
-`"customValidation"`: `"string"`  
+These types can be declared in the JSON via: `"customValidation"`: `"string"`  
 
-If both customValidation and regex are provided, both are applied — customValidation is executed first, followed by regex.
+If both `customValidation` and `regex` are provided, both are applied — `customValidation` is executed first, followed by `regex`.
 
 ## Example with Multiple Validations
 
