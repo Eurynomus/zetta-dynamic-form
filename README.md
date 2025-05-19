@@ -123,6 +123,7 @@ If both `customValidation` and `regex` are provided, both are applied — `custo
   }
 }
 ```
+</details>
 
 ## Example with Regex
 
@@ -143,6 +144,7 @@ If both `customValidation` and `regex` are provided, both are applied — `custo
   }
 }
 ```
+</details>
 
 # Mock API JSON Schema
 
@@ -302,3 +304,4 @@ The fields will be populated after 2 seconds (simulating a real API call), if yo
   ]
 }
 ```
+</details>
