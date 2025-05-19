@@ -633,3 +633,14 @@ Check the console in the browser for an output.
 }
 ```
 </details>
+
+# Unit tests
+
+The project includes unit tests covering the core functionality. They are implemented using `React Testing Library` and `Jest` to ensure robust and maintainable form behavior.
+
+* Form Generator tests - Validate rendering of input fields and buttons, error handling for empty input, and dynamic form generation from valid JSON schema.
+* API mock tests - Verify the behavior of the `mockApiCall` function for various valid inputs and error cases.
+* Validation helper tests - Ensure custom validation logic works correctly for email, string-only, number-only, and regex-based rules.  
+
+The tests can be started with:  
+npm test  or yarn test
