@@ -76,6 +76,75 @@ src/
     └── Validations.test.tsx - Unit tests for the validations
 ```
 
+# Validation Rules
+
+The dynamic form builder uses `react-hook-form` under the hood to validate fields based on a JSON schema. Validation rules are defined per field via the `validation` object.
+
+## Supported Validation Rules
+Each field can have one or more of the following validation rules:
+
+| Rule               | Type                              | Description                                                                   |
+| ------------------ | --------------------------------- | ----------------------------------------------------------------------------- |
+| `required`         | `string`                          | Error message to show if the field is left empty.                             |
+| `minLength`        | `{ value: number, message }`      | Sets the minimum number of characters for input.                              |
+| `maxLength`        | `{ value: number, message }`      | Sets the maximum number of characters for input.                              |
+| `regex`            | `{ value: string, message }`      | Validates input using a custom regular expression.                            |
+| `customValidation` | `"string"`, `"number"`, `"email"` | Custom built-in validations for common input types (letters, numbers, email). |
+
+
+## How it Works
+The validation rules in your JSON input are automatically parsed and passed into `"react-hook-form's` `"rules` parameter. Additional helper logic (`customValidation`) is applied via the `applyCustomValidation` utility.
+
+## Custom Validation Types
+| Type       | Description                     | Pattern Used                   |
+| ---------- | ------------------------------- | ------------------------------ |
+| `"string"` | Only letters and spaces allowed | `/^[A-Za-z\s]+$/`              |
+| `"number"` | Only numeric characters allowed | `/^[0-9]+$/`                   |
+| `"email"`  | Standard email format           | `/^[^\s@]+@[^\s@]+\.[^\s@]+$/` |
+
+These types can be declared in the JSON via:  
+`"customValidation"`: `"string"`  
+
+If both customValidation and regex are provided, both are applied — customValidation is executed first, followed by regex.
+
+## Example with Multiple Validations
+
+<details>
+<summary>Click to view JSON configuration</summary>
+
+```json
+{
+  "type": "text",
+  "label": "First Name",
+  "name": "firstName",
+  "validation": {
+    "required": "First name is required",
+    "minLength": { "value": 2, "message": "Must be at least 2 characters" },
+    "customValidation": "string"
+  }
+}
+```
+
+## Example with Regex
+
+<details>
+<summary>Click to view JSON configuration</summary>
+
+```json
+{
+  "type": "text",
+  "label": "Postal Code",
+  "name": "postalcode",
+  "validation": {
+    "required": "Postal Code is required",
+    "regex": {
+      "value": "^[A-Z]{3}[0-9]{3}$",
+      "message": "Must be in format AAA999"
+    }
+  }
+}
+```
+
 # Mock API JSON Schema
 
 This schema defines a dynamic form structure that supports manual input fields, grouped fields, validation rules, and auto-filling data from APIs triggered by specific inputs.  
@@ -143,7 +212,7 @@ Each field may include a `validation` object defining rules, such as `"required"
 
 ## JSON schema configuration
 
-The fields will be populated if you use **userId** and **orderId** from **1 to 3**. Above 3 will throw a form error and fields will be cleared.  
+The fields will be populated after 2 seconds (simulating a real API call), if you use **userId** and **orderId** from **1 to 3**. Above 3 will throw a form error and fields will be cleared.  
 
 <details>
 <summary>Click to view JSON configuration</summary>
