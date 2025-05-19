@@ -52,7 +52,7 @@ export function renderField(
 
     case 'dropdown':
       return (
-        <FormControl fullWidth sx={{ mb: 2 }} key={field.name}>
+        <FormControl fullWidth sx={{ mb: 2 }} key={field.name} error={!!control._formState.errors[field.name]}>
           <InputLabel>{field.label}</InputLabel>
           <Controller
             name={field.name}
@@ -61,10 +61,10 @@ export function renderField(
             rules={field.validation}
             render={({ field: rhfField, fieldState: { error } }) => (
               <>
-                <Select {...rhfField} label={field.label} error={!!error}>
+                <Select {...rhfField} label={field.label}>
                   {field.options?.map((option, index) => (
-                    <MenuItem key={`${field.name}-${option}-${index}`} value={option}>
-                      {option}
+                    <MenuItem key={`${field.name}-${option.value}-${index}`} value={option.label}>
+                      {option.label}
                     </MenuItem>
                   ))}
                 </Select>
@@ -111,9 +111,9 @@ export function renderField(
                   {field.options?.map((option, index) => (
                     <FormControlLabel
                       key={`${field.name}-${option}-${index}`}
-                      value={option}
+                      value={option.value}
                       control={<Radio />}
-                      label={option}
+                      label={option.label}
                     />
                   ))}
                 </RadioGroup>
