@@ -9,31 +9,27 @@ This project allows you to generate interactive, configurable forms from a simpl
 
 ## Features
 
-✅ Schema-driven form rendering
-✅ Supports input types like text, textarea, dropdown, checkbox, radio
-✅ Nested field groups
-✅ Show/hide logic based on field values
-✅ Custom validation logic
-✅ API-mocked auto-filling
-✅ Clean output: structured JSON of form values
-✅ Fully responsive, component-based UI
-✅ Built-in unit tests
+✅ Schema-driven form rendering  
+✅ Supports input types like text, textarea, dropdown, checkbox, radio  
+✅ Nested field groups  
+✅ Show/hide logic based on field values  
+✅ Custom validation logic  
+✅ API-mocked auto-filling  
+✅ Clean output: structured JSON of form values  
+✅ Fully responsive, component-based UI  
+✅ Built-in unit tests  
 
 ## Installation
 
 1. Clone repository
-https://github.com/Eurynomus/zetta-dynamic-form.git
+https://github.com/Eurynomus/zetta-dynamic-form.git  
 cd zetta-dynamic-form
 
-2. Install dependencies
-npm install
-# or
-yarn
+2. Install dependencies  
+npm install or yarn
 
-3. Start the development server
-npm run dev
-# or
-yarn
+3. Start the development server  
+npm run dev or yarn start
 
 ## How It Works
 
@@ -43,3 +39,4 @@ When the JSON is valid:
 * As soon as a valid schema is provided, the form renders dynamically.
 * A “Reset Form” button is available to reset the schema input and start fresh.
 * Mock API calls are triggered where applicable to auto-fill fields.
+* On submit the filled values are output as a structured JSON object — preserving the hierarchy of nested groups and field dependencies.
