@@ -82,7 +82,7 @@ This schema defines a dynamic form structure that supports manual input fields, 
 
 ## Text Fields  
 Simple text input fields for user interaction.  
-# Properties:  
+### Properties:  
 
 - **type**: `"text"` - Defines the field as a text input.
 - **label**: User-facing name displayed for the field.
@@ -102,7 +102,7 @@ Simple text input fields for user interaction.
 
 Groups multiple related fields under a labeled section with support for API-triggered auto-filling of nested fields.
 
-# Properties
+### Properties
 
 - **type**: `"group"` - Defines the field as a group.
 - **label**: Section name displayed to the user.
@@ -138,4 +138,98 @@ When all fields in a group's `apiTrigger` array have values, an API call is trig
 
 ## Validation
 
-Each field may include a `validation` object defining rules, such as `"required"`, to enforce input constraints.
+Each field may include a `validation` object defining rules, such as `"required"` or others like `""customValidation": "string""`, `""customValidation": "number""`, `""customValidation": "email""` or even a regex.
+
+
+## JSON schema configuration
+
+The fields will be populated if you use **userId** and **orderId** from **1 to 3**. Above 3 will throw a form error and fields will be cleared.  
+
+<details>
+<summary>Click to view JSON configuration</summary>
+
+```json
+{
+  "fields": [
+    {
+      "type": "text",
+      "label": "User ID",
+      "name": "userId",
+      "validation": { "required": "User ID is required" }
+    },
+    {
+      "type": "text",
+      "label": "Token",
+      "name": "token",
+      "validation": { "required": "Token is required" }
+    },
+    {
+      "type": "group",
+      "label": "User Info (Auto-Filled)",
+      "name": "userInfo",
+      "apiTrigger": ["userId", "token"],
+      "apiAutoFill": {
+        "firstName": "firstName",
+        "lastName": "lastName",
+        "email": "email",
+        "role": "role"
+      },
+      "fields": [
+        {
+          "type": "text",
+          "label": "First Name",
+          "name": "firstName"
+        },
+        {
+          "type": "text",
+          "label": "Last Name",
+          "name": "lastName"
+        },
+        {
+          "type": "text",
+          "label": "Email",
+          "name": "email"
+        },
+        {
+          "type": "text",
+          "label": "Role",
+          "name": "role"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "label": "Order ID",
+      "name": "orderId",
+      "validation": { "required": "Order ID is required" }
+    },
+    {
+      "type": "group",
+      "label": "Order Info (Auto-Filled)",
+      "name": "orderInfo",
+      "apiTrigger": ["orderId"],
+      "apiAutoFill": {
+        "product": "product",
+        "quantity": "quantity",
+        "status": "status"
+      },
+      "fields": [
+        {
+          "type": "text",
+          "label": "Product",
+          "name": "product"
+        },
+        {
+          "type": "text",
+          "label": "Quantity",
+          "name": "quantity"
+        },
+        {
+          "type": "text",
+          "label": "Status",
+          "name": "status"
+        }
+      ]
+    }
+  ]
+}
