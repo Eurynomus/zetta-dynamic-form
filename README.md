@@ -420,7 +420,7 @@ Check the console in the browser for an output.
       "label": "User Type",
       "name": "userType",
         "options": [
-   	{ "label": "Person", "value": "Person" },
+   	    { "label": "Person", "value": "Person" },
     	{ "label": "Business", "value": "Business" }
       ],
       "validation": {
@@ -449,7 +449,7 @@ Check the console in the browser for an output.
           "validation": {
             "required": "First name is required",
             "maxLength": { "value": 6, "message": "Maximum allowed characters is 6" },
-	    "customValidation": "string"
+	        "customValidation": "string"
           }
         },
         {
@@ -526,9 +526,9 @@ Check the console in the browser for an output.
           "type": "dropdown",
           "label": "Industry",
           "name": "industry",
-        "options": [
-   	{ "label": "Tech", "value": "tech" },
-    	{ "label": "Finance", "value": "finance" }
+          "options": [
+   	       { "label": "Tech", "value": "tech" },
+    	   { "label": "Finance", "value": "finance" }
       ],
           "validation": {
             "required": "Industry is required"
@@ -638,9 +638,9 @@ Check the console in the browser for an output.
 
 The project includes unit tests covering the core functionality. They are implemented using `React Testing Library` and `Jest` to ensure robust and maintainable form behavior.
 
-* Form Generator tests - Validate rendering of input fields and buttons, error handling for empty input, and dynamic form generation from valid JSON schema.
+* Form Generator tests - Validate rendering of input fields and buttons, error handling for empty input and dynamic form generation from valid JSON schema.
 * API mock tests - Verify the behavior of the `mockApiCall` function for various valid inputs and error cases.
-* Validation helper tests - Ensure custom validation logic works correctly for email, string-only, number-only, and regex-based rules.  
+* Validation helper tests - Ensure custom validation logic works correctly for email, string-only, number-only and regex-based rules.  
 
 ## The tests can be started with:  
 npm test  or yarn test
