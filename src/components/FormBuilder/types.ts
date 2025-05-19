@@ -2,7 +2,7 @@ export interface Field {
     type: string;
     label: string;
     name: string;
-    options?: string[];
+    options?: { label: string; value: string }[];
     validation?: ValidationRules;
     visibleIf?: { field: string; value: any };
     fields?: Field[];

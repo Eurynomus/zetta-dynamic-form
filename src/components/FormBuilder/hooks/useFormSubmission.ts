@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { getVisibleFieldNames } from '../utils/formUtils';
 import type { Field } from '../types';
+import { transformFormData } from '../utils/transformFormData';
 
 export function useFormSubmission(
     reset: Function,
@@ -20,11 +21,13 @@ export function useFormSubmission(
                 return obj;
             }, {} as Record<string, any>);
 
+        const nestedData = transformFormData(fields, filteredData);
+
         setTimeout(() => {
             setIsSubmitting(false);
             setShowSuccess(true);
             reset();
-            console.log('Form Output:', filteredData);
+            console.log('Form Output:', nestedData);
         }, 2000);
     };
 
