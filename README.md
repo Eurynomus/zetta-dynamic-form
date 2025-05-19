@@ -305,3 +305,231 @@ The fields will be populated after 2 seconds (simulating a real API call), if yo
 }
 ```
 </details>
+
+# Examples
+
+## Example with all validators
+<details>
+<summary>Click to view JSON configuration</summary>
+
+```json
+{
+  "fields": [
+    {
+      "type": "dropdown",
+      "label": "User Type",
+      "name": "userType",
+        "options": [
+   	{ "label": "Person", "value": "Person" },
+    	{ "label": "Business", "value": "Business" }
+      ],
+      "validation": {
+        "required": "User type is required"
+      }
+    },
+    {
+      "type": "group",
+      "label": "Personal Info",
+      "visibleIf": { "field": "userType", "value": "Person" },
+      "fields": [
+        {
+          "type": "text",
+          "label": "First Name",
+          "name": "firstName",
+          "validation": {
+            "required": "First name is required",
+            "minLength": { "value": 2, "message": "Must be at least 2 characters" },
+            "customValidation": "string"
+          }
+        },
+        {
+          "type": "text",
+          "label": "Last Name",
+          "name": "lastName",
+          "validation": {
+            "required": "First name is required",
+            "maxLength": { "value": 6, "message": "Maximum allowed characters is 6" },
+	    "customValidation": "string"
+          }
+        },
+        {
+          "type": "text",
+          "label": "Age",
+          "name": "age",
+          "validation": {
+            "required": "Age is required",
+	        "customValidation": "number"
+          }
+        },
+        {
+          "type": "radio",
+          "label": "Gender",
+          "name": "gender",
+          "options": [
+   	       { "label": "Male", "value": "Male" },
+    	   { "label": "Female", "value": "Female" }
+        ],
+          "validation": {
+            "required": "Please select a gender"
+          }
+        },
+        {
+          "type": "text",
+          "label": "Postal Code",
+          "name": "postalcode",
+          "validation": {
+            "required": "Postal Code is required",
+            "regex": {
+    	    "value": "^[A-Z]{3}[0-9]{3}$",
+            "message": "Must be in format AAA999"
+  	    }
+          }
+        },
+        {
+          "type": "text",
+          "label": "Email",
+          "name": "email",
+          "validation": {
+            "required": "Email is required",
+            "customValidation": "email"
+          }
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "label": "Business Info",
+      "visibleIf": { "field": "userType", "value": "Business" },
+      "fields": [
+        {
+          "type": "text",
+          "label": "Company Name",
+          "name": "companyName",
+          "validation": {
+            "required": "Company name is required"
+          }
+        },
+        {
+          "type": "textarea",
+          "label": "Company Description",
+          "name": "companyDescription"
+        },
+        {
+          "type": "checkbox",
+          "label": "Is this a registered business?",
+          "name": "isRegistered",
+          "validation": {
+            "required": "This checkbox is required"
+          }
+        },
+        {
+          "type": "dropdown",
+          "label": "Industry",
+          "name": "industry",
+        "options": [
+   	{ "label": "Tech", "value": "tech" },
+    	{ "label": "Finance", "value": "finance" }
+      ],
+          "validation": {
+            "required": "Industry is required"
+          }
+        }
+      ]
+    }    
+  ]
+}
+```
+</details>
+
+## Example with auto-fill from mockApi
+
+<details>
+<summary>Click to view JSON configuration</summary>
+
+```json
+{
+  "fields": [
+    {
+      "type": "text",
+      "label": "User ID",
+      "name": "userId",
+      "validation": { "required": "User ID is required" }
+    },
+    {
+      "type": "text",
+      "label": "Token",
+      "name": "token",
+      "validation": { "required": "Token is required" }
+    },
+    {
+      "type": "group",
+      "label": "User Info (Auto-Filled)",
+      "name": "userInfo",
+      "apiTrigger": ["userId", "token"],
+      "apiAutoFill": {
+        "firstName": "firstName",
+        "lastName": "lastName",
+        "email": "email",
+        "role": "role"
+      },
+      "fields": [
+        {
+          "type": "text",
+          "label": "First Name",
+          "name": "firstName"
+        },
+        {
+          "type": "text",
+          "label": "Last Name",
+          "name": "lastName"
+        },
+        {
+          "type": "text",
+          "label": "Email",
+          "name": "email"
+        },
+        {
+          "type": "text",
+          "label": "Role",
+          "name": "role"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "label": "Order ID",
+      "name": "orderId",
+      "validation": { "required": "Order ID is required" }
+    },
+    {
+      "type": "group",
+      "label": "Order Info (Auto-Filled)",
+      "name": "orderInfo",
+      "apiTrigger": ["orderId"],
+      "apiAutoFill": {
+        "product": "product",
+        "quantity": "quantity",
+        "status": "status"
+      },
+      "fields": [
+        {
+          "type": "text",
+          "label": "Product",
+          "name": "product"
+        },
+        {
+          "type": "text",
+          "label": "Quantity",
+          "name": "quantity"
+        },
+        {
+          "type": "text",
+          "label": "Status",
+          "name": "status"
+        }
+      ]
+    }
+  ]
+}
+```
+</details>
