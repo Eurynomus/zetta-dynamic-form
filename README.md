@@ -21,14 +21,14 @@ This project allows you to generate interactive, configurable forms from a simpl
 
 ## Installation
 
-1. Clone repository  
+1. Clone repository.  
 https://github.com/Eurynomus/zetta-dynamic-form.git  
 cd zetta-dynamic-form
 
-2. Install dependencies  
+2. Install dependencies.  
 npm install or yarn
 
-3. Start the development server  
+3. Start the development server.  
 npm run dev or yarn start
 
 ## How It Works
@@ -51,26 +51,29 @@ src/
 ├── components/
 │   ├── FormBuilder/
 │   │   ├── components/
-│   │   │   ├── FormErrorAlert.tsx - Displaying error messages in the form
-│   │   │   ├── SubmitButton.tsx - Form submit button
-│   │   │   └── SuccessNotification.tsx - Displays a temporary popup message on successfull submission
+│   │   │   ├── FormErrorAlert.tsx **- Displaying error messages in the form**
+│   │   │   ├── SubmitButton.tsx **- Form submit button**
+│   │   │   └── SuccessNotification.tsx **- Displays a temporary popup message on successfull submission**
 │   │   ├── hooks/
-│   │   │   ├── useApiAutoFill.ts - Automatically fetches and fills form data from APIs based on triggers
-│   │   │   ├── useFormSubmission.ts - Form submission logic, including data filtering, transformation and UI state management
-│   │   │   └── useVisibleFields.ts - Tracks which fields are visible in the form over time and manage form state accordingly
+│   │   │   ├── useApiAutoFill.ts **- Automatically fetches and fills form data from APIs based on triggers**
+│   │   │   ├── useFormSubmission.ts **- Form submission logic, including data filtering, transformation and UI state management**
+│   │   │   └── useVisibleFields.ts **- Tracks which fields are visible in the form over time and manage form state accordingly**
 │   │   ├── utils/
-│   │   │   ├── formUtils.ts - Determines which fields should be visible based on the current form values
-│   │   │   ├── transformFormData.ts - Transforms form data into a structured object based on fields definition
-│   │   │   └── validationHelper.ts - Custom validations for string, number, regex, email
-│   │   ├── FormBuilder.tsx - The dynamic form builder. Implements form & state validation, dynamic field rendering, field visibility tracking, api auto-fill, 
-                              submit handling & states, error display, success feedback, submit button
-│   │   ├── FormFieldRenderer.tsx - The main component for all field types
-        └── types.ts - All interfaces
+│   │   │   ├── formUtils.ts **- Determines which fields should be visible based on the current form values**
+│   │   │   ├── transformFormData.ts **- Transforms form data into a structured object based on fields definition**
+│   │   │   └── validationHelper.ts **- Custom validations for string, number, regex, email**
+│   │   ├── FormBuilder.tsx **- The dynamic form builder. Implements form & state validation, dynamic field rendering, field visibility tracking, api auto-fill, 
+                              submit handling & states, error display, success feedback, submit button**
+│   │   ├── FormFieldRenderer.tsx **- The main component for all field types**
+        └── types.ts **- All interfaces**
 │   └── FormGenerator/
-        ├── FormGenerator.tsx - Dynamically renders your JSON schema into form fields
+        ├── FormGenerator.tsx **- Dynamically renders your JSON schema into form fields**
 ├── services/
-│   └── mockApi.ts - Mock API data
+│   └── mockApi.ts **- Mock API data**
 └── tests/
-    ├── FormGenerator.test.tsx - Unit tests for the Form Generator component
-    ├── MockApi.test.tsx - Unit tests for the mockapi functionality
-    └── Validations.test.tsx - Unit tests for the validations
+    ├── FormGenerator.test.tsx **- Unit tests for the Form Generator component**
+    ├── MockApi.test.tsx **- Unit tests for the mockapi functionality**
+    └── Validations.test.tsx **- Unit tests for the validations**
+```
+
+## Example JSON schema
